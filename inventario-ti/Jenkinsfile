@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Preparar ambiente') {
             steps {
-                bat 'bat 'C:\\Users\\danle\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv %VENV_DIR%''
+                bat 'C:\\Users\\danle\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv %VENV_DIR%'
                 bat '%VENV_DIR%\\Scripts\\python -m pip install --upgrade pip'
                 bat '%VENV_DIR%\\Scripts\\pip install -r requirements.txt'
             }
