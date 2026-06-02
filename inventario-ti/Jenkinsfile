@@ -9,23 +9,23 @@ pipeline {
 
     stages {
         stage('Preparar ambiente') {
-    steps {
-        bat 'C:\\Users\\danle\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv %VENV_DIR%'
-        bat '%VENV_DIR%\\Scripts\\python -m pip install --upgrade pip'
-        bat '%VENV_DIR%\\Scripts\\pip install -r inventario-ti\\requirements.txt'
-             }
-        }   
+            steps {
+                bat 'C:\\Users\\danle\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv %VENV_DIR%'
+                bat '%VENV_DIR%\\Scripts\\python -m pip install --upgrade pip'
+                bat '%VENV_DIR%\\Scripts\\pip install -r inventario-ti\\requirements.txt'
+            }
+        }
 
         stage('Build executavel') {
             steps {
-                bat 'if exist assets\\logo.png %VENV_DIR%\\Scripts\\python tools\\create_icon.py'
-                bat '%VENV_DIR%\\Scripts\\pyinstaller --clean --noconfirm inventario-ti.spec'
+                bat 'if exist inventario-ti\\assets\\logo.png %VENV_DIR%\\Scripts\\python inventario-ti\\tools\\create_icon.py'
+                bat '%VENV_DIR%\\Scripts\\pyinstaller --clean --noconfirm inventario-ti\\inventario-ti.spec'
             }
         }
 
         stage('Gerar instalador') {
             steps {
-                bat '"%INNO_SETUP_COMPILER%" installer\\setup.iss'
+                bat '"%INNO_SETUP_COMPILER%" inventario-ti\\installer\\setup.iss'
             }
         }
     }
