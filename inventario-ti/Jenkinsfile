@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    environment {
+        PYTHONUTF8 = '1'
+        VENV_DIR = '.venv'
+        INNO_SETUP_COMPILER = 'C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe'
+    }
+
+    stages {
+        stage('Preparar ambiente') {
+            steps {
+                bat 'python -m venv %VENV_DIR%'
+                bat '%VENV_DIR%\\Scripts\\python -m pip install --upgrade pip'
+                bat '%VENV_DIR%\\Scripts\\pip install -r requirements.txt'
+            }
+        }
+
+        stage('Build executavel') {
+            steps {
+                bat 'if exist assets\\logo.png %VENV_DIR%\\Scripts\\python tools\\create_icon.py'
+                bat '%VENV_DIR%\\Scripts\\pyinstaller --clean --noconfirm inventario-ti.spec'
+            }
+        }
+
+        stage('Gerar instalador') {
+            steps {
+                bat '"%INNO_SETUP_COMPILER%" installer\\setup.iss'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+        }
+    }
+}
